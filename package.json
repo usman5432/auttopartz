@@ -1,0 +1,24 @@
+{
+  "name": "signuptest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node signup-api/index.js",
+    "server": "nodemon signup-api/index.js",
+    "client": "npm start --prefix signup-page",
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
