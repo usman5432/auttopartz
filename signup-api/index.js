@@ -13,12 +13,15 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(cors());
+
 app.use(cors({
   origin: 'http://localhost:3000', // Replace with your frontend's origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 
+-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -111,28 +114,28 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-app.get('/api/login', (req, res) => {
-  const { email, password } = req.body;
+// app.get('/api/login', (req, res) => {
+//   const { email, password } = req.body;
 
-  // Check if user exists
-  const query = 'SELECT * FROM users WHERE email = ?';
-  db.query(query, [email], async (err, results) => {
-    if (err) throw err;
-    if (results.length === 0) {
-      return res.status(400).json({ success: false, message: 'Invalid email or password.' });
-    }
+//   // Check if user exists
+//   const query = 'SELECT * FROM users WHERE email = ?';
+//   db.query(query, [email], async (err, results) => {
+//     if (err) throw err;
+//     if (results.length === 0) {
+//       return res.status(400).json({ success: false, message: 'Invalid email or password.' });
+//     }
 
-    const user = results[0];
-    console.log(user);
+//     const user = results[0];
+//     console.log(user);
 
-    // Compare plain text passwords
-    if (password !== user.password) {
-      return res.status(400).json({ success: false, message: 'Invalid email or password.' });
-    }
+//     // Compare plain text passwords
+//     if (password !== user.password) {
+//       return res.status(400).json({ success: false, message: 'Invalid email or password.' });
+//     }
 
-    res.json({ success: true, message: 'Login successful', userId: user.id });
-  });
-});
+//     res.json({ success: true, message: 'Login successful', userId: user.id });
+//   });
+// });
 
 
 app.get('/api/user/:email', (req, res) => {
