@@ -801,6 +801,67 @@ app.post('/api/topup', async (req, res) => {
   }
 });
 
+//Total Balance Amount
+
+app.get('/api/totalAmounts', (req, res) => {
+  const sql = `
+    SELECT user_id, SUM(total_amount) AS total_amount
+    FROM order_details
+    GROUP BY user_id
+  `;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      res.status(500).send('Error fetching data');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
+app.get('/api/totalPaid', (req, res) => {
+  const sql = `
+    SELECT user_id, SUM(paid_amount) AS paid_amount
+    FROM order_details
+    GROUP BY user_id
+  `;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      res.status(500).send('Error fetching data');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get('/api/totalBalance', (req, res) => {
+  const sql = ` SELECT user_id, (SUM(total_amount) - SUM(paid_amount)) AS balance FROM order_details
+    GROUP BY user_id `;
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      res.status(500).send('Error fetching data');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+app.get('/api/viewOrdersWithAmounts', (req, res) => {
+  const order_tracking_number = req.query.order_tracking_number;
+  const query = 'SELECT * FROM order_details';
+  db.query(query, [order_tracking_number], (err, results) => {
+    if (err) {
+      console.error('Error fetching orders:', err);
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
