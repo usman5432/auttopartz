@@ -851,7 +851,8 @@ app.get('/api/totalBalance', (req, res) => {
 
 app.get('/api/viewOrdersWithAmounts', (req, res) => {
   const order_tracking_number = req.query.order_tracking_number;
-  const query = 'SELECT * FROM order_details';
+  const query = 'SELECT *, (total_amount - paid_amount) AS balance FROM order_details;';
+  
   db.query(query, [order_tracking_number], (err, results) => {
     if (err) {
       console.error('Error fetching orders:', err);
